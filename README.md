@@ -15,6 +15,7 @@ MachineProyectoP1/
 │   ├── Mejora1_Modelo_por_Oracion.ipynb               Modelo en dos etapas por oración
 │   ├── Mejora2_Validacion_Cruzada_Repetida.ipynb      Decidir empates con 15 particiones
 │   ├── Mejora3_Ajuste_Fino_Regresion_Logistica.ipynb  Grilla fina de C y elastic net
+│   ├── Mejora4_Dos_Etapas_SVM.ipynb                   Dos etapas + SVM lineal y comparación justa de modelos
 │   └── Exploracion_modelos_alternativos.ipynb         Otros modelos, votación y apilamiento
 ├── html/                  Versión HTML de cada notebook
 ├── models/                Modelos entrenados (.joblib), uno por modelo
@@ -29,17 +30,18 @@ Para Bloque Neón se sube un único modelo: el que corresponda al mejor envío d
 
 ## Resumen de los modelos
 
-Todos usan la misma partición 80/20 (semilla 42) y las mismas 5 particiones de validación cruzada, por lo que son comparables. La última columna cuenta cuántas de las 3.000 predicciones de `eval.csv` difieren del envío del modelo actual.
+Todos usan la misma partición 80/20 (semilla 42). La columna de 15 particiones viene de la comparación justa del notebook `Mejora4_Dos_Etapas_SVM.ipynb` (3 repeticiones de validación cruzada de 5 particiones sobre las 12.000 reseñas), que es la estimación más confiable. La métrica de Kaggle es la exactitud y el puntaje público se calcula sobre solo 900 reseñas (el 30% de `eval.csv`), con un error de cerca de ±1 punto; normalmente las 2.100 restantes son las que definen el ranking final.
 
-| Modelo (nombre de archivo) | F1-macro CV | Exactitud test | F1-macro test | Predicciones distintas |
-|:---|:---:|:---:|:---:|:---:|
-| `regresion_logistica_bloques` (modelo actual) | 0,8992 | 0,8946 | 0,8993 | 0 |
-| `dos_etapas_por_oracion` (Mejora 1) | 0,9040 | 0,8971 | 0,9021 | 120 |
-| `regresion_logistica_cv_repetida` (Mejora 2) | 0,8992 | 0,8946 | 0,8993 | 0 (idéntico al actual) |
-| `regresion_logistica_ajuste_fino` (Mejora 3) | 0,8998 | 0,8975 | 0,9019 | 30 |
-| `exploracion_apilamiento` (exploración) | 0,9014 | 0,9000 | 0,9047 | 112 |
+| Modelo (nombre de archivo) | Exactitud test | F1-macro test | Exactitud 15 particiones | Kaggle público | Predicciones distintas vs actual |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| `dos_etapas_svm` (Mejora 4) | 0,8988 | 0,9036 | **0,9009** | 0,89888 | 127 |
+| `dos_etapas_por_oracion` (Mejora 1) | 0,8971 | 0,9021 | 0,8997 | 0,90222 | 120 |
+| `exploracion_apilamiento` (exploración) | 0,9000 | 0,9047 | 0,8991 | 0,90000 | 112 |
+| `regresion_logistica_ajuste_fino` (Mejora 3) | 0,8975 | 0,9019 | empate con el actual (Mejora 3) | 0,90666 | 30 |
+| `regresion_logistica_bloques` (modelo actual) | 0,8946 | 0,8993 | 0,8966 | 0,90222 | 0 |
+| `regresion_logistica_cv_repetida` (Mejora 2) | 0,8946 | 0,8993 | igual al actual | 0,90222 | 0 (idéntico) |
 
-Las diferencias entre los modelos son de décimas de punto y quedan dentro del ruido de una muestra de 3.000 reseñas (cerca de 0,6 puntos). Los notebooks de las mejoras explican cuáles son diferencias reales y cuáles no.
+Los tres primeros mejoran al modelo actual entre 0,25 y 0,42 puntos de forma consistente, pero entre ellos las diferencias están dentro del ruido. En el puntaje público, contado en aciertos de 900, el ajuste fino tiene 4 más que el modelo actual, el apilamiento 2 menos y la Mejora 4 3 menos: diferencias dentro del ruido que no permiten distinguir los modelos (ver la sección 10 del notebook de la Mejora 4).
 
 ## Cómo replicar los resultados
 
@@ -53,7 +55,7 @@ Las diferencias entre los modelos son de décimas de punto y quedan dentro del r
 3. La primera celda descarga las stop words de NLTK solo si no están en el computador, por lo que puede requerir conexión a internet esa única vez.
 4. Al terminar se regeneran `models/regresion_logistica_bloques.joblib` y `submissions/submission_regresion_logistica_bloques.csv`.
 
-Todas las fuentes de aleatoriedad usan `RANDOM_STATE = 42` (partición train/test, validación cruzada y modelos), por lo que las cifras del notebook se reproducen exactamente con las versiones de `requirements.txt`. El notebook principal tarda alrededor de 12 minutos por las búsquedas de hiperparámetros; los de mejora tardan entre 4 y 11 minutos.
+Todas las fuentes de aleatoriedad usan `RANDOM_STATE = 42` (partición train/test, validación cruzada y modelos), por lo que las cifras del notebook se reproducen exactamente con las versiones de `requirements.txt`. El notebook principal tarda alrededor de 12 minutos por las búsquedas de hiperparámetros; los de mejora tardan entre 4 y 15 minutos.
 
 Las predicciones del modelo final también se verificaron con Python 3.11.5 y scikit-learn 1.5.2: las 3.000 predicciones sobre `eval.csv` son idénticas. Las únicas diferencias entre entornos están en la cuarta cifra decimal de Random Forest y del árbol de decisión, que usan azar interno.
 
