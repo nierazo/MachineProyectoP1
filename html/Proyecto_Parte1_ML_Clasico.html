@@ -7796,7 +7796,7 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5e4e93d0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9ebe8638">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7831,7 +7831,7 @@ a.anchor-link {
 </tr>
 <tr>
 <td style="text-align:left">Subir un único modelo, el del mejor resultado.</td>
-<td style="text-align:left">Se entrega <code>modelo_final.joblib</code>, que es el mejor modelo según la sección 10 y el que produce <code>submission.csv</code>.</td>
+<td style="text-align:left">Se entrega <code>models/regresion_logistica_bloques.joblib</code>, que es el mejor modelo según la sección 10 y el que produce <code>submissions/submission_regresion_logistica_bloques.csv</code>.</td>
 </tr>
 <tr>
 <td style="text-align:left">Resultados replicables.</td>
@@ -7843,7 +7843,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=af2d1cca">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=34b02250">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7871,7 +7871,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=378009a6">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dd69a255">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7881,7 +7881,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c3997480">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=85cf78b1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7889,7 +7889,8 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">unicodedata</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
@@ -7923,17 +7924,29 @@ a.anchor-link {
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">'display.max_colwidth'</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">'display.width'</span><span class="p">,</span> <span class="mi">160</span><span class="p">)</span>
 
-<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'stopwords'</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">'spanish'</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+    <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'stopwords'</span><span class="p">)</span>
 
 <span class="n">RANDOM_STATE</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">ORDEN_CLASES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'negativo'</span><span class="p">,</span> <span class="s1">'neutral'</span><span class="p">,</span> <span class="s1">'positivo'</span><span class="p">]</span>
+
+<span class="c1"># Rutas del proyecto (este notebook está en la carpeta notebooks/)</span>
+<span class="n">RUTA_DATOS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'..'</span><span class="p">,</span> <span class="s1">'data'</span><span class="p">)</span>
+<span class="n">RUTA_MODELOS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'..'</span><span class="p">,</span> <span class="s1">'models'</span><span class="p">)</span>
+<span class="n">RUTA_ENVIOS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'..'</span><span class="p">,</span> <span class="s1">'submissions'</span><span class="p">)</span>
+<span class="n">NOMBRE_MODELO</span> <span class="o">=</span> <span class="s1">'regresion_logistica_bloques'</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">RUTA_MODELOS</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">RUTA_ENVIOS</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=89bec0e8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=955664a1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7944,7 +7957,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c2fdb9a9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1f9e87fe">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7954,7 +7967,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2a88afef">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ef592a43">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7962,9 +7975,9 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'train.csv'</span><span class="p">)</span>
-<span class="n">evaluacion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'eval.csv'</span><span class="p">)</span>
-<span class="n">muestra_envio</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'sample_submission.csv'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RUTA_DATOS</span><span class="p">,</span> <span class="s1">'train.csv'</span><span class="p">))</span>
+<span class="n">evaluacion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RUTA_DATOS</span><span class="p">,</span> <span class="s1">'eval.csv'</span><span class="p">))</span>
+<span class="n">muestra_envio</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RUTA_DATOS</span><span class="p">,</span> <span class="s1">'sample_submission.csv'</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">'train:'</span><span class="p">,</span> <span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">'| eval:'</span><span class="p">,</span> <span class="n">evaluacion</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">'| sample_submission:'</span><span class="p">,</span> <span class="n">muestra_envio</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">train</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -8049,7 +8062,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fdc0f484">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=92eeff73">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8060,7 +8073,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=57f06958">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0ceea6f0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8070,7 +8083,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0ab1a2fa">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1985459b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8157,7 +8170,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=47269d3b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c459286c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8169,7 +8182,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d32f44eb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=269c75a5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8179,7 +8192,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4e5a6490">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5b00b5f1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8217,7 +8230,7 @@ Mismos ids y mismo orden en eval y sample_submission: True
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e9c2b193">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3403b1fa">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8227,7 +8240,7 @@ Mismos ids y mismo orden en eval y sample_submission: True
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ea24edd3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a8007552">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8431,7 +8444,7 @@ Mismos ids y mismo orden en eval y sample_submission: True
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6ae26ca3">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0fdced39">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8442,7 +8455,7 @@ Mismos ids y mismo orden en eval y sample_submission: True
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d8c518a1">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=41796e6d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8452,7 +8465,7 @@ Mismos ids y mismo orden en eval y sample_submission: True
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=26a7170e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=19f95fa7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8493,7 +8506,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6b6785a9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3e96e3e2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8505,7 +8518,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5ad93adf">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=487107e6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8515,7 +8528,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5cda0e29">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8ad15d56">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8566,7 +8579,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=573dba64">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=56807467">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8578,7 +8591,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ad05782e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a6bd7e06">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8589,7 +8602,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=909afe1f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=92391c2f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8600,7 +8613,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d5b851cd">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=368de4db">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8690,7 +8703,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a3c010f6">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=999bde41">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8701,7 +8714,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=baa18941">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ca99c53c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8719,7 +8732,7 @@ Ejemplos de errores de escritura:
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e8125565">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=eeb17291">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8790,7 +8803,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0eff3aa9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9023fb2b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8801,7 +8814,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a43072f9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a04b0771">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8811,7 +8824,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0ff02f08">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=41afe911">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8944,7 +8957,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f3ba7a48">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=58dc8ee0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8961,7 +8974,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4786075f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6a3b2383">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8972,7 +8985,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=638257b8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d77d66aa">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8982,7 +8995,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a472ecf5">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=03563b2e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9068,7 +9081,7 @@ LIMPIO (sin tildes, sin signos, con stemming):
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6d0ca96d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d96f766b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9117,7 +9130,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c0cb8822">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a804b5f3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9128,7 +9141,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0a9219f8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5d858dc9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9139,7 +9152,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=df5dd3e1">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0b1e32e8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9149,7 +9162,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5a99c160">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2bba1ced">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9217,7 +9230,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3fd6dffd">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2e8b5f94">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9228,7 +9241,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=92dcc91a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ac694e37">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9345,7 +9358,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8a585d4c">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a394be49">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9356,7 +9369,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7fb1eaaf">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ad412404">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9367,7 +9380,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=02c65b1d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5723e861">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9383,7 +9396,7 @@ weighted avg      0.727     0.728     0.727      2400
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=317ceedc">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fb6adb57">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9448,7 +9461,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e9b31b7b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d8ce8417">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9458,7 +9471,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3ff30721">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d98cad3a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9543,7 +9556,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=33d68e6d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e922771b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9554,7 +9567,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a08c652f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2673b352">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9564,7 +9577,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f8797729">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8583f2e1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9709,7 +9722,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=28849a18">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e9d75d2f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9721,7 +9734,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7737e85b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=780c1cd9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9731,7 +9744,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6f4ceae3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=eac8c39d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9831,7 +9844,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c48ed728">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=774bac11">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9842,7 +9855,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fd469936">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=da30e263">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9853,7 +9866,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=63c74d46">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=715e0316">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9864,7 +9877,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e2bf22f8">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5110b08a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9899,7 +9912,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9d5d214a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7cbbba5c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9910,7 +9923,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=98085033">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d4b04f81">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9920,7 +9933,7 @@ BLOQUE "cláusula final":
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=913d5c35">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3bdf147a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10052,7 +10065,7 @@ Prueba -&gt; exactitud: 0.8946 | F1-macro: 0.8993
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7cefa8a4">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d30d0a35">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10062,7 +10075,7 @@ Prueba -&gt; exactitud: 0.8946 | F1-macro: 0.8993
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1308e7a2">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4c5ad9f0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10172,7 +10185,7 @@ Prueba -&gt; exactitud: 0.8858 | F1-macro: 0.8895
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f57064d2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cd3fb0b3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10182,7 +10195,7 @@ Prueba -&gt; exactitud: 0.8858 | F1-macro: 0.8895
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=92329712">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f2cc807d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10299,7 +10312,7 @@ Prueba -&gt; exactitud: 0.7963 | F1-macro: 0.8004
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=53e4110b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=61f9cdca">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10309,7 +10322,7 @@ Prueba -&gt; exactitud: 0.7963 | F1-macro: 0.8004
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=28a8ae7b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0a530461">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10426,7 +10439,7 @@ Prueba -&gt; exactitud: 0.6737 | F1-macro: 0.6837
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ad02f969">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=354d200f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10436,7 +10449,7 @@ Prueba -&gt; exactitud: 0.6737 | F1-macro: 0.6837
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d4df12bd">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4bacaed5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10560,7 +10573,7 @@ Prueba -&gt; exactitud: 0.8408 | F1-macro: 0.8458
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fb2937ae">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ea7be42f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10578,7 +10591,7 @@ Prueba -&gt; exactitud: 0.8408 | F1-macro: 0.8458
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b3206825">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5d76de4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10588,7 +10601,7 @@ Prueba -&gt; exactitud: 0.8408 | F1-macro: 0.8458
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e0284759">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8a7cc62d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10715,7 +10728,7 @@ Prueba -&gt; exactitud: 0.8408 | F1-macro: 0.8458
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e3818a28">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=19c31b69">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10728,7 +10741,7 @@ Prueba -&gt; exactitud: 0.8408 | F1-macro: 0.8458
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3be3e46e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=06156759">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10738,7 +10751,7 @@ Prueba -&gt; exactitud: 0.8408 | F1-macro: 0.8458
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8d3821a8">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=87414ead">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10789,7 +10802,7 @@ weighted avg      0.894     0.895     0.894      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e84d08e2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4db3101f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10800,7 +10813,7 @@ weighted avg      0.894     0.895     0.894      2400
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=748551a5">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d712d027">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10895,7 +10908,7 @@ weighted avg      0.894     0.895     0.894      2400
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=91d33ef0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=37909098">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10945,7 +10958,7 @@ weighted avg      0.894     0.895     0.894      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1807b5e5">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=119d225e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10958,7 +10971,7 @@ weighted avg      0.894     0.895     0.894      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f6299f04">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2a17e880">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10969,7 +10982,7 @@ weighted avg      0.894     0.895     0.894      2400
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0a1a24ee">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f67b0a6a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10979,7 +10992,7 @@ weighted avg      0.894     0.895     0.894      2400
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c291b743">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=deeed5a1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11211,7 +11224,7 @@ Atributos que más empujan hacia "negativo":
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=87fce6cc">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=43796e1d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11284,7 +11297,7 @@ Atributos que más empujan hacia "negativo":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f3ed2ae2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=111bb90d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11296,7 +11309,7 @@ Atributos que más empujan hacia "negativo":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=df08148c">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=671a047f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11307,7 +11320,7 @@ Atributos que más empujan hacia "negativo":
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=40b4727c">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b6dbdfa8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11318,7 +11331,7 @@ Atributos que más empujan hacia "negativo":
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=703d51ae">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b7c5a6a3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11350,7 +11363,7 @@ F1-macro en validación cruzada (12.000 reseñas):  0.8994 +/- 0.0030
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d3bbcc77">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1c316e1b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11363,7 +11376,7 @@ F1-macro en validación cruzada (12.000 reseñas):  0.8994 +/- 0.0030
 
 <span class="n">pred_eval</span> <span class="o">=</span> <span class="n">modelo_final</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">evaluacion</span><span class="p">[[</span><span class="s1">'text'</span><span class="p">]])</span>
 <span class="n">envio</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'id'</span><span class="p">:</span> <span class="n">evaluacion</span><span class="p">[</span><span class="s1">'id'</span><span class="p">],</span> <span class="s1">'answer'</span><span class="p">:</span> <span class="n">pred_eval</span><span class="p">})</span>
-<span class="n">envio</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'submission.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">envio</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RUTA_ENVIOS</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'submission_</span><span class="si">{</span><span class="n">NOMBRE_MODELO</span><span class="si">}</span><span class="s1">.csv'</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Parámetros del modelo final:'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">modelo_final</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">'modelo'</span><span class="p">]</span><span class="o">.</span><span class="n">get_params</span><span class="p">())</span>
@@ -11443,7 +11456,7 @@ F1-macro en validación cruzada (12.000 reseñas):  0.8994 +/- 0.0030
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7e52a083">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c7cfb6b5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11527,7 +11540,7 @@ Valores nulos: 0
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ee979168">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=aa560778">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11535,9 +11548,10 @@ Valores nulos: 0
 <div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">modelo_final</span><span class="p">,</span> <span class="s1">'modelo_final.joblib'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">ruta_modelo</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RUTA_MODELOS</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">NOMBRE_MODELO</span><span class="si">}</span><span class="s1">.joblib'</span><span class="p">)</span>
+<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">modelo_final</span><span class="p">,</span> <span class="n">ruta_modelo</span><span class="p">)</span>
 
-<span class="n">modelo_cargado</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'modelo_final.joblib'</span><span class="p">)</span>
+<span class="n">modelo_cargado</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ruta_modelo</span><span class="p">)</span>
 <span class="n">pred_cargado</span> <span class="o">=</span> <span class="n">modelo_cargado</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">evaluacion</span><span class="p">[[</span><span class="s1">'text'</span><span class="p">]])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'El modelo guardado reproduce exactamente las mismas predicciones:'</span><span class="p">,</span> <span class="p">(</span><span class="n">pred_cargado</span> <span class="o">==</span> <span class="n">pred_eval</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
 </pre></div>
@@ -11559,19 +11573,19 @@ Valores nulos: 0
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2a928af7">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7d59fa74">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>La validación cruzada sobre las 12.000 reseñas da una exactitud de 0,895 ± 0,003 y un F1-macro de 0,899 ± 0,003, consistente con lo observado en el conjunto de prueba. Este es el desempeño que se espera en la competencia, aunque el puntaje en Kaggle puede variar un poco por tratarse de otra muestra de 3.000 reseñas (diferencias de un punto o menos serían normales).</p>
-<p>El archivo <code>submission.csv</code> tiene el mismo formato que <code>sample_submission.csv</code> y las predicciones tienen una distribución de clases parecida a la de entrenamiento (35,5% <code>negativo</code>, 28,1% <code>neutral</code> y 36,4% <code>positivo</code>). El modelo guardado en <code>modelo_final.joblib</code> reproduce exactamente las mismas predicciones.</p>
+<p>El archivo de envío (<code>submissions/submission_regresion_logistica_bloques.csv</code>) tiene el mismo formato que <code>sample_submission.csv</code> y las predicciones tienen una distribución de clases parecida a la de entrenamiento (35,5% <code>negativo</code>, 28,1% <code>neutral</code> y 36,4% <code>positivo</code>). El modelo guardado en <code>models/regresion_logistica_bloques.joblib</code> reproduce exactamente las mismas predicciones.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=081354d9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=914e4e50">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11582,7 +11596,7 @@ Valores nulos: 0
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c3d47030">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=072b2233">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11600,7 +11614,7 @@ Valores nulos: 0
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=518b3abd">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bdbb324d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11611,7 +11625,7 @@ Valores nulos: 0
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e652ef14">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=51bbef25">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11630,7 +11644,7 @@ Valores nulos: 0
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=44e64d39">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5d89e3a8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11641,7 +11655,7 @@ Valores nulos: 0
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fb4d8139">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5b90b035">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11649,13 +11663,13 @@ Valores nulos: 0
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol>
 <li>Crear un entorno con Python 3.9 e instalar las librerías con <code>pip install -r requirements.txt</code> (las versiones exactas están en ese archivo).</li>
-<li>Dejar este notebook en la misma carpeta que <code>train.csv</code>, <code>eval.csv</code> y <code>sample_submission.csv</code>.</li>
+<li>Mantener la estructura de carpetas del proyecto: este notebook está en <code>notebooks/</code> y los datos (<code>train.csv</code>, <code>eval.csv</code>, <code>sample_submission.csv</code>) en <code>data/</code>. El notebook se ejecuta desde la carpeta <code>notebooks/</code>.</li>
 <li>Ejecutar todas las celdas en orden (<code>Restart &amp; Run All</code>). La primera celda descarga las stop words de NLTK, por lo que necesita conexión a internet esa vez. El notebook completo tarda alrededor de 15 minutos por las búsquedas de hiperparámetros.</li>
-<li>Al terminar se regeneran <code>submission.csv</code> y <code>modelo_final.joblib</code>.</li>
+<li>Al terminar se regeneran <code>submissions/submission_regresion_logistica_bloques.csv</code> y <code>models/regresion_logistica_bloques.joblib</code>.</li>
 </ol>
 <p>Todas las fuentes de aleatoriedad usan <code>RANDOM_STATE = 42</code>: la partición train/test, la validación cruzada y los modelos que usan azar (árbol, Random Forest y el solver <code>liblinear</code> de la regresión logística). Con las mismas versiones de las librerías, las cifras de este notebook se reproducen exactamente.</p>
-<p>Para usar <code>modelo_final.joblib</code> fuera del notebook hay que ejecutar antes las celdas que definen las funciones de preprocesamiento (secciones 5, 7 y 8), porque el pipeline guardado hace referencia a ellas. Después basta con:</p>
-<div class="highlight"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'modelo_final.joblib'</span><span class="p">)</span>
+<p>Para usar el modelo guardado fuera del notebook hay que ejecutar antes las celdas que definen las funciones de preprocesamiento (secciones 5, 7 y 8), porque el pipeline guardado hace referencia a ellas. Después basta con:</p>
+<div class="highlight"><pre><span></span><span class="n">modelo</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'../models/regresion_logistica_bloques.joblib'</span><span class="p">)</span>
 <span class="n">predicciones</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">evaluacion</span><span class="p">[[</span><span class="s1">'text'</span><span class="p">]])</span>
 </pre></div>
 </div>
