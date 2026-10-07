@@ -16,6 +16,8 @@ MachineProyectoP1/
 │   ├── Mejora2_Validacion_Cruzada_Repetida.ipynb      Decidir empates con 15 particiones
 │   ├── Mejora3_Ajuste_Fino_Regresion_Logistica.ipynb  Grilla fina de C y elastic net
 │   ├── Mejora4_Dos_Etapas_SVM.ipynb                   Dos etapas + SVM lineal y comparación justa de modelos
+│   ├── Mejora5_Marcado_Negacion.ipynb                 Marcado del alcance de la negación ("no X" -> "X_neg")
+│   ├── Mejora6_Ensamble_Voto_Suave.ipynb              Voto suave de los 5 modelos candidatos
 │   └── Exploracion_modelos_alternativos.ipynb         Otros modelos, votación y apilamiento
 ├── html/                  Versión HTML de cada notebook
 ├── models/                Modelos entrenados (.joblib), uno por modelo
@@ -40,8 +42,14 @@ Todos usan la misma partición 80/20 (semilla 42). La columna de 15 particiones 
 | `regresion_logistica_ajuste_fino` (Mejora 3) | 0,8975 | 0,9019 | empate con el actual (Mejora 3) | 0,90666 | 30 |
 | `regresion_logistica_bloques` (modelo actual) | 0,8946 | 0,8993 | 0,8966 | 0,90222 | 0 |
 | `regresion_logistica_cv_repetida` (Mejora 2) | 0,8946 | 0,8993 | igual al actual | 0,90222 | 0 (idéntico) |
+| `regresion_logistica_negacion` (Mejora 5) | 0,8971 | 0,9014 | empate con el actual (Mejora 5) | 0,90333 | 55 |
+| `ensamble_voto_suave` (Mejora 6) | 0,9004 | 0,9051 | ver nota (Mejora 6, bootstrap) | pendiente de subir | 72 |
 
 Los tres primeros mejoran al modelo actual entre 0,25 y 0,42 puntos de forma consistente, pero entre ellos las diferencias están dentro del ruido. En el puntaje público, contado en aciertos de 900, el ajuste fino tiene 4 más que el modelo actual, el apilamiento 2 menos y la Mejora 4 3 menos: diferencias dentro del ruido que no permiten distinguir los modelos (ver la sección 10 del notebook de la Mejora 4).
+
+La Mejora 5 marca el alcance de la negación ("no funciona bien" -> "no funciona_neg bien_neg") en las dos oraciones finales de la reseña. En la comparación de 15 particiones gana en 11 de 15 (el mínimo para contar como mejora es 12), así que también es un empate con el modelo actual. Su puntaje público (0,90333 = 813/900) confirma esa lectura: 1 acierto más que el modelo actual (812/900) y 3 menos que el ajuste fino (816/900), una diferencia que cabe dentro del error de ±1 punto del puntaje público.
+
+La Mejora 6 promedia las probabilidades (voto suave, `VotingClassifier`) de los cinco modelos anteriores (actual, ajuste fino, apilamiento, dos etapas y dos etapas + SVM). Como dos de los candidatos tardan minutos en entrenarse, se comparó con una prueba de bootstrap pareado sobre el conjunto de prueba en vez de las 15 particiones: el ensamble mejora de forma clara al modelo actual (gana en 97,9 % de los remuestreos) y probablemente al modelo en dos etapas (92,3 %) y a la SVM de la Mejora 4 (74,1 %), pero frente al ajuste fino es solo un indicio (84,2 %, no concluyente) y frente al apilamiento es un empate (54,5 %) — el apilamiento ya combina modelos por su cuenta. El ajuste fino sigue siendo el mejor envío del grupo; falta subir el envío del ensamble a Kaggle para el puntaje público.
 
 ## Cómo replicar los resultados
 
