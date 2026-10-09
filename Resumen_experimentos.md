@@ -80,6 +80,26 @@ El modelo de la Mejora 7 se copió tal cual de su notebook. Como control, reprod
 
 Todas las combinaciones quedaron entre 0,9019 y 0,9026. Los hiperparámetros no influyen, la SVM ya no aporta una vez que el modelo tiene NB-LR, y la votación no agrega nada a un modelo cuya etapa 2 ya recibe las probabilidades de la regresión logística.
 
+### 4.3 Variantes de la Mejora 9
+
+El modelo de la Mejora 9 se copió de su notebook y, como control, reprodujo exactamente su resultado (0,9081). Se probaron tres ideas:
+
+| Variante | Exactitud 15 particiones | Referencia | Diferencia | Gana en | Veredicto |
+|:---|:---:|:---|:---:|:---:|:---|
+| Promediar las probabilidades de 3 modelos con distintas semillas del aumento (0, 1 y 2) | 0,9094 | Mejora 9 | +0,13 | 9 de 15 | empate |
+| Etapa 2 con los últimos 4 trozos *con opinión* en lugar de los últimos 4 por posición | 0,9075 | Mejora 9 | −0,07 | 5 de 15 | empate |
+| Regresión logística + A + B, promedio de 3 semillas | 0,9076 | Regresión logística + A + B | +0,30 | 13 de 15 | mejora |
+| Regresión logística + A + B, umbral del detector 0,5 y 25% de reseñas aumentadas | 0,9052 | Regresión logística + A + B | +0,06 | 9 de 15 | empate |
+| Regresión logística + A + B, 75% de reseñas aumentadas | 0,9042 | Regresión logística + A + B | −0,03 | 7 de 15 | empate |
+| Regresión logística + A + B, umbral del detector 0,3 (con 25%, 50% o 75% aumentadas) | 0,9011 a 0,9016 | Regresión logística + A + B | −0,30 a −0,35 | 3 o 4 de 15 | empeora o empate |
+| Regresión logística + A + B, umbral del detector 0,7 (con 25%, 50% o 75% aumentadas) | 0,8760 a 0,8994 | Regresión logística + A + B | −0,51 a −2,86 | 0 a 3 de 15 | empeora |
+
+- **Semillas del aumento:** con una sola semilla, la Mejora 9 da entre 0,9074 y 0,9084 según la semilla, así que su resultado no depende de un sorteo afortunado. Promediar 3 semillas mejora claramente a la regresión logística, que es más sensible al sorteo, pero en el modelo en dos etapas la ganancia (+0,13, unas 3 reseñas de 2.400 por partición) no alcanza el mínimo de 12 de 15 y triplica el tiempo de entrenamiento. Además, la regresión logística con 3 semillas empata con la Mejora 9 (−0,06, 7 de 15).
+- **Trozos con opinión:** no aportan. La etapa 2 ya tenía atributos basados en los trozos con opinión, y los bloques de la regresión logística, Naive Bayes y NB-LR ya usan la última oración con opinión.
+- **Umbral y proporción:** los valores usados en la Mejora 9 (umbral 0,5, mitad de las reseñas aumentadas) son los mejores o empatan con los mejores. Lo más probable es que con un umbral bajo (0,3) el detector deje pasar más frases sin opinión, y que con uno alto (0,7) salte oraciones que sí la tienen.
+
+La Mejora 9 se mantiene como modelo final: ninguna variante la supera con la regla de decisión, y las que empatan son más complejas o más lentas.
+
 ## 5. Análisis de errores y techo
 
 Con el modelo de la Mejora 4, en una predicción fuera de muestra por reseña:
@@ -113,17 +133,19 @@ Antes de la Mejora 9, **dos etapas + NB-LR (Mejora 7)** era el mejor modelo seg�
 
 Su ventaja sobre las otras alternativas fuertes (Mejora 4, NB-LR, votación suave de la Mejora 8) es de décimas y está dentro del ruido. Además, el modelo está en su punto óptimo: ninguna variante probada (sección 4.2) se aleja más de 0,04 puntos de su exactitud.
 
-## 8. Diagnóstico del modelo elegido (`Diagnostico_Modelo_Final.ipynb`)
+## 8. Diagnóstico del modelo final (`Diagnostico_Modelo_Final.ipynb`)
 
-Con 12.000 predicciones fuera de muestra (validación cruzada de 5 particiones):
+La primera versión de este diagnóstico se hizo con el modelo de la Mejora 7 y encontró su principal debilidad: una frase neutra al final bajaba la exactitud a entre 0,63 y 0,71, porque los modelos aprendieron asociaciones espurias entre las palabras de la última oración y la etiqueta (por ejemplo, las reseñas cuya última oración habla de uso diario son 268 positivas contra 163 negativas en entrenamiento). Eso motivó la Mejora 9. La versión actual revisa el modelo final (Mejora 9) con 12.000 predicciones fuera de muestra (validación cruzada de 5 particiones):
 
-- **Sobreajuste:** 99,1% de exactitud en entrenamiento contra 90,3% fuera de muestra. La diferencia se concentra en las reseñas ambiguas, que el modelo memoriza (97% contra 50% en las de cierre ambiguo); en las neutrales es prácticamente cero. La validación es estable (±0,3 puntos) y el puntaje público coincide con la validación cruzada (0,6 errores estándar). Para el puntaje final se espera entre 0,890 y 0,915.
-- **Curva de aprendizaje:** la validación sube de 0,884 (1.920 reseñas) a 0,903 (9.600). Más datos del mismo tipo ayudarían solo décimas.
-- **Sesgo entre clases:** no hay. Predice 34,9% negativo, 29,9% neutral y 35,1% positivo (real: 35,1, 29,8 y 35,1), con errores simétricos (575 contra 560). Corrige la leve inclinación hacia `positivo` de la regresión logística.
-- **Calibración:** con más de 0,9 de confianza (79% de las reseñas) acierta el 98%. En el 21% restante es demasiado optimista y concentra cerca del 86% de los errores.
-- **Subgrupos:** no hay sesgo por tildes (0,902 contra 0,903) ni por longitud. Rinde peor en reseñas de 5 o más oraciones (0,795).
-- **Robustez:** quitar tildes o la primera oración no lo afecta, y los errores de digitación le restan cerca de 1 punto. Agregar una frase neutra al final baja la exactitud a entre 0,63 y 0,71, porque los modelos aprendieron asociaciones espurias entre las palabras de la última oración y la etiqueta. Por ejemplo, las reseñas cuya última oración habla de uso diario son 268 positivas contra 163 negativas en entrenamiento. Es la principal limitación del modelo frente a reseñas reales.
-- **Datos de la competencia:** se parecen a los de entrenamiento (AUC de 0,529 para distinguirlos), así que el puntaje final debería ser cercano a 0,90.
+- **Sobreajuste:** 98,4% de exactitud en entrenamiento contra 91,0% fuera de muestra (7,4 puntos; la Mejora 7 tenía 8,8). La diferencia se concentra en las reseñas ambiguas, que el modelo memoriza (93% contra 54% en las de cierre ambiguo); en las neutrales es prácticamente cero. La validación es estable (±0,5 puntos).
+- **Fugas de información (prueba de permutación):** con las etiquetas barajadas, el modelo final queda en 0,352 y la regresión logística robusta en 0,328, al nivel del azar (clase más frecuente: 0,351). El aumento de datos y el detector no filtran información de validación. La regresión logística memoriza el 85% de las etiquetas al azar en entrenamiento, lo que muestra que su exactitud de entrenamiento no indica su desempeño real.
+- **Kaggle:** el puntaje público (0,9178) está 1,0 errores estándar por encima de la validación de 15 particiones (0,9081), y el modelo se eligió sin mirarlo. Para el puntaje final se espera entre 0,896 y 0,921.
+- **Curva de aprendizaje:** la validación sube de 0,890 (1.920 reseñas) a 0,910 (9.600). Más datos del mismo tipo ayudarían solo décimas.
+- **Sesgo entre clases:** no hay. Predice 35,2% negativo, 29,8% neutral y 34,9% positivo (real: 35,1, 29,8 y 35,1), con errores simétricos (524 contra 543) y solo 10 errores relacionados con `neutral`.
+- **Calibración:** con más de 0,9 de confianza (81% de las reseñas) acierta el 98%. En el 19% restante es demasiado optimista y concentra el 84% de los errores.
+- **Subgrupos:** no hay sesgo por tildes (0,911 contra 0,908) ni por longitud. Rinde peor en reseñas de 5 o más oraciones (0,797), porque en ellas se concentran los cierres ambiguos (25,7%, contra 1,6% en las de 1 a 3 oraciones) y los conectores aditivos.
+- **Robustez:** con una frase neutra al final la exactitud baja solo entre 0,1 y 0,2 puntos (entre 0,908 y 0,909 con cuatro frases distintas). Quitar tildes o la primera oración no lo afecta, y los errores de digitación le siguen restando cerca de 1 punto.
+- **Datos de la competencia:** se parecen a los de entrenamiento (AUC de 0,529 para distinguirlos), así que el puntaje final debería ser cercano a la validación cruzada.
 
 ## 9. Limitaciones y trabajo futuro
 
