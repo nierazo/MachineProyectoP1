@@ -104,7 +104,7 @@ id,answer
 102,positivo
 103,negativo
 104,negativo
-105,positivo
+105,negativo
 106,neutral
 107,neutral
 108,neutral
@@ -169,7 +169,7 @@ id,answer
 167,positivo
 168,negativo
 169,neutral
-170,negativo
+170,positivo
 171,negativo
 172,negativo
 173,neutral
@@ -282,7 +282,7 @@ id,answer
 280,neutral
 281,negativo
 282,negativo
-283,positivo
+283,negativo
 284,positivo
 285,negativo
 286,positivo
@@ -399,7 +399,7 @@ id,answer
 397,neutral
 398,positivo
 399,negativo
-400,positivo
+400,negativo
 401,positivo
 402,positivo
 403,neutral
@@ -695,7 +695,7 @@ id,answer
 693,neutral
 694,positivo
 695,positivo
-696,negativo
+696,positivo
 697,negativo
 698,negativo
 699,neutral
@@ -865,7 +865,7 @@ id,answer
 863,neutral
 864,neutral
 865,neutral
-866,positivo
+866,negativo
 867,neutral
 868,neutral
 869,neutral
@@ -1017,7 +1017,7 @@ id,answer
 1015,negativo
 1016,negativo
 1017,positivo
-1018,negativo
+1018,positivo
 1019,neutral
 1020,negativo
 1021,positivo
@@ -1327,7 +1327,7 @@ id,answer
 1325,positivo
 1326,negativo
 1327,neutral
-1328,positivo
+1328,negativo
 1329,positivo
 1330,negativo
 1331,neutral
@@ -1437,7 +1437,7 @@ id,answer
 1435,negativo
 1436,negativo
 1437,negativo
-1438,positivo
+1438,neutral
 1439,neutral
 1440,positivo
 1441,negativo
@@ -1548,7 +1548,7 @@ id,answer
 1546,neutral
 1547,positivo
 1548,neutral
-1549,negativo
+1549,positivo
 1550,neutral
 1551,positivo
 1552,negativo
@@ -1658,7 +1658,7 @@ id,answer
 1656,negativo
 1657,positivo
 1658,negativo
-1659,negativo
+1659,positivo
 1660,negativo
 1661,negativo
 1662,positivo
@@ -1715,7 +1715,7 @@ id,answer
 1713,neutral
 1714,negativo
 1715,negativo
-1716,positivo
+1716,negativo
 1717,positivo
 1718,positivo
 1719,positivo
@@ -1728,14 +1728,14 @@ id,answer
 1726,positivo
 1727,neutral
 1728,negativo
-1729,positivo
+1729,negativo
 1730,positivo
 1731,positivo
 1732,positivo
 1733,negativo
 1734,positivo
 1735,positivo
-1736,positivo
+1736,negativo
 1737,negativo
 1738,neutral
 1739,negativo
@@ -1766,7 +1766,7 @@ id,answer
 1764,positivo
 1765,negativo
 1766,positivo
-1767,positivo
+1767,negativo
 1768,positivo
 1769,negativo
 1770,negativo
@@ -1901,7 +1901,7 @@ id,answer
 1899,positivo
 1900,neutral
 1901,neutral
-1902,positivo
+1902,negativo
 1903,negativo
 1904,negativo
 1905,neutral
@@ -2053,7 +2053,7 @@ id,answer
 2051,negativo
 2052,positivo
 2053,positivo
-2054,positivo
+2054,negativo
 2055,negativo
 2056,negativo
 2057,negativo
@@ -2061,7 +2061,7 @@ id,answer
 2059,negativo
 2060,neutral
 2061,positivo
-2062,negativo
+2062,positivo
 2063,negativo
 2064,negativo
 2065,positivo
@@ -2287,7 +2287,7 @@ id,answer
 2285,positivo
 2286,negativo
 2287,negativo
-2288,positivo
+2288,negativo
 2289,positivo
 2290,positivo
 2291,negativo
@@ -2418,7 +2418,7 @@ id,answer
 2416,positivo
 2417,neutral
 2418,negativo
-2419,positivo
+2419,neutral
 2420,positivo
 2421,neutral
 2422,negativo
@@ -2433,7 +2433,7 @@ id,answer
 2431,negativo
 2432,negativo
 2433,positivo
-2434,positivo
+2434,negativo
 2435,negativo
 2436,negativo
 2437,positivo
@@ -2551,7 +2551,7 @@ id,answer
 2549,positivo
 2550,positivo
 2551,neutral
-2552,positivo
+2552,negativo
 2553,negativo
 2554,positivo
 2555,positivo
@@ -2569,7 +2569,7 @@ id,answer
 2567,positivo
 2568,positivo
 2569,neutral
-2570,negativo
+2570,positivo
 2571,neutral
 2572,neutral
 2573,negativo
@@ -2639,10 +2639,10 @@ id,answer
 2637,negativo
 2638,positivo
 2639,neutral
-2640,positivo
+2640,negativo
 2641,negativo
 2642,negativo
-2643,positivo
+2643,negativo
 2644,negativo
 2645,positivo
 2646,negativo
@@ -2746,7 +2746,7 @@ id,answer
 2744,negativo
 2745,positivo
 2746,neutral
-2747,positivo
+2747,negativo
 2748,negativo
 2749,negativo
 2750,positivo
@@ -2826,7 +2826,7 @@ id,answer
 2824,negativo
 2825,positivo
 2826,neutral
-2827,positivo
+2827,negativo
 2828,negativo
 2829,neutral
 2830,neutral
@@ -2861,7 +2861,7 @@ id,answer
 2859,positivo
 2860,negativo
 2861,positivo
-2862,positivo
+2862,negativo
 2863,neutral
 2864,neutral
 2865,negativo
@@ -2967,7 +2967,7 @@ id,answer
 2965,neutral
 2966,negativo
 2967,positivo
-2968,negativo
+2968,positivo
 2969,neutral
 2970,negativo
 2971,negativo
