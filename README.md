@@ -11,7 +11,8 @@ MachineProyectoP1/
 │   ├── eval.csv
 │   └── sample_submission.csv
 ├── notebooks/             Notebooks con las celdas ejecutadas
-│   ├── Proyecto_Parte1_ML_Clasico.ipynb               Notebook principal
+│   ├── Proyecto_Parte1_Final.ipynb                    Notebook de entrega: todo el proceso y el modelo final
+│   ├── Proyecto_Parte1_ML_Clasico.ipynb               Notebook principal (primera versión del modelo)
 │   ├── Mejora1_Modelo_por_Oracion.ipynb               Modelo en dos etapas por oración
 │   ├── Mejora2_Validacion_Cruzada_Repetida.ipynb      Decidir empates con 15 particiones
 │   ├── Mejora3_Ajuste_Fino_Regresion_Logistica.ipynb  Grilla fina de C y elastic net
@@ -22,11 +23,17 @@ MachineProyectoP1/
 │   ├── Mejora8_Ensambles_Train_Val_Test.ipynb         Ensambles con partición entrenamiento/validación/prueba
 │   ├── Diagnostico_Modelo_Final.ipynb                 Sobreajuste, fugas, sesgo y robustez del modelo final (Mejora 9)
 │   ├── Mejora9_Robustez_Opinion.ipynb                 Aumento de datos y última oración con opinión (robustez)
-│   └── Exploracion_modelos_alternativos.ipynb         Otros modelos, votación y apilamiento
+│   ├── Exploracion_modelos_alternativos.ipynb         Otros modelos, votación y apilamiento
+│   ├── PruebaF_NBLR_Dos_Etapas.ipynb                  Prueba: n-gramas de caracteres en NB-LR (empata con la Mejora 7)
+│   ├── samuel_Mejora9_KNN_Compuerta_Tres_Regresiones.ipynb  Tres regresiones NB-LR con compuerta KNN (no mejora)
+│   ├── samuel_Mejora10_Techo_de_Exactitud.ipynb             Análisis del error y techo de exactitud (sin modelo nuevo)
+│   └── samuel_Mejora11_Ortografia_y_Ensamble.ipynb          Corrección ortográfica y ensambles (no cumplen la regla)
 ├── html/                  Versión HTML de cada notebook
 ├── models/                Modelos entrenados (.joblib), uno por modelo
 ├── submissions/           Predicciones listas para subir a Kaggle (id, answer), una por modelo
 ├── requirements.txt
+├── HANDOVER_EJECUCION.md  Instrucciones para ejecutar el notebook de entrega en otro computador
+├── Resumen_experimentos.md
 └── README.md
 ```
 
@@ -42,6 +49,7 @@ Todos usan la misma partición 80/20 (semilla 42), salvo la Mejora 8, que usa 60
 |:---|:---:|:---:|:---:|:---:|:---:|
 | `dos_etapas_nblr_robusto` (Mejora 9) | 0,9025 | no reportado | **0,9081** | **0,91777** | 191 |
 | `regresion_logistica_robusta` (Mejora 9) | 0,9033 | no reportado | 0,9046 | 0,91666 | 157 |
+| `samuel_ensamble_ortografia` (Mejora 11 de Samuel) | no reportado | no reportado | 0,9035 | sin registrar | no calculado |
 | `dos_etapas_nblr` (Mejora 7) | 0,8988 | 0,9037 | 0,9023 | 0,90777 | 145 |
 | `dos_etapas_svm` (Mejora 4) | 0,8988 | 0,9036 | 0,9009 | 0,89888 | 127 |
 | `nb_regresion_logistica` (Mejora 7) | 0,8983 | 0,9029 | 0,9004 | sin registrar | 185 |
@@ -53,6 +61,7 @@ Todos usan la misma partición 80/20 (semilla 42), salvo la Mejora 8, que usa 60
 | `regresion_logistica_cv_repetida` (Mejora 2) | 0,8946 | 0,8993 | igual al actual | 0,90222 | 0 (idéntico) |
 | `regresion_logistica_negacion` (Mejora 5) | 0,8971 | 0,9014 | empate con el actual (Mejora 5) | 0,90333 | 55 |
 | `ensamble_voto_suave` (Mejora 6) | 0,9004 | 0,9051 | ver nota (Mejora 6, bootstrap) | sin registrar | 72 |
+| `samuel_knn_compuerta_tres_regresiones` (Mejora 9 de Samuel) | 0,9029 (partición 60/20/20) | no reportado | no evaluada | sin registrar | no calculado |
 | `votacion_suave_mejores` (Mejora 8) | 0,9025 (otra partición) | 0,9070 (otra partición) | no evaluada | sin registrar | 77 |
 
 **El mejor modelo en la comparación de 15 particiones es `dos_etapas_nblr_robusto` (Mejora 9):** 0,9081, +0,59 puntos sobre la Mejora 7, ganando en 14 de 15. También tiene el mejor puntaje público del grupo (0,91777 = 826/900) y es robusto a frases sin opinión al final de la reseña (ver la nota de la Mejora 9).
@@ -68,6 +77,8 @@ La Mejora 7 hace tres cosas. Primero corrige un error de la representación del 
 La Mejora 8 responde a los comentarios del profesor: usa una partición en entrenamiento, validación y prueba (60/20/20), mide el sesgo de los modelos y revisa los ensambles siguiendo la práctica. La votación suave de los 2 mejores modelos (regresión logística y dos etapas + NB-LR) es el mejor ensamble: 0,8996 en validación y 0,9025 en prueba, frente a 0,8967 y 0,8946 de la regresión logística. El stacking la iguala, y Random Forest y Gradient Boosting rinden mucho peor sobre texto. Su exactitud de prueba no es comparable con la del resto de la tabla, porque se mide sobre otra partición. Su ventaja sobre dos etapas + NB-LR es pequeña, y su envío cambia solo 69 predicciones respecto al de ese modelo.
 
 La Mejora 9 corrige la principal debilidad que encontró la primera versión del notebook de diagnóstico, hecha con la Mejora 7: con una frase sin opinión al final de la reseña (por ejemplo "Viene en color negro."), los modelos pierden entre 20 y 40 puntos de exactitud, porque le dan mucho peso a la última oración. Prueba dos arreglos: (A) aumento de datos, que agrega al final de la mitad de las reseñas de entrenamiento una oración de una reseña neutral sin cambiar su etiqueta, y (B) usar la última oración con opinión, elegida por un detector opinión/hecho (TF-IDF + regresión logística entrenada solo con `train.csv`). Con los dos arreglos, la exactitud se mantiene cerca de 0,90 con frases neutras al final y además sube la exactitud normal: la Mejora 7 + A + B llega a 0,9081 y la regresión logística + A + B a 0,9046 (+0,58, ganando en 14 de 15). La Mejora 7 + A + B supera a la regresión logística + A + B en 13 de 15 particiones, apenas por encima del mínimo de 12, y esa diferencia depende de la semilla del aumento de datos, así que es la conclusión menos segura. Frente al envío de la Mejora 7, `dos_etapas_nblr_robusto` cambia 113 de las 3.000 predicciones, por lo que la mejora esperada en el puntaje público era de unas 5 reseñas de 900, menos que el error de ±1 punto. En Kaggle subió de 817 a 826 aciertos (0,91777), y la regresión logística + A + B sacó 825 (0,91666). La diferencia de 1 reseña entre los dos es ruido, y los dos puntajes quedan cerca de 1 error estándar por encima de lo que predice la comparación de 15 particiones (unos 817 y 814 aciertos), así que es probable que el puntaje final sea algo menor que el público. El notebook de diagnóstico, actualizado al modelo final, lo confirma con validación cruzada: con una frase neutra al final la exactitud baja solo entre 0,1 y 0,2 puntos. También muestra que el modelo final sobreajusta menos que el de la Mejora 7 (7,4 contra 8,8 puntos de diferencia entre entrenamiento y validación) y, con una prueba de permutación, que el aumento de datos y el detector no filtran información de validación.
+
+Los notebooks que empiezan con `samuel_` son las Mejoras 9, 10 y 11 de Samuel, que se hicieron en paralelo a la Mejora 9 de robustez; el prefijo evita confundirlas con ella. Ninguno supera al modelo final: la compuerta KNN empata con las regresiones sin compuerta (0,9029 frente a 0,9038 en prueba), el análisis del techo estima un máximo realista cercano a 0,905 a 0,91 porque el 12% de las reseñas termina en un cierre de duda que es azar respecto del texto, y la corrección ortográfica y los ensambles suben a lo sumo 0,1 puntos sobre la Mejora 7 (0,9035), sin cumplir la regla de 12 de 15 particiones.
 
 Un resumen de todos los experimentos, incluidos los que no mejoraron, está en `Resumen_experimentos.md`.
 
